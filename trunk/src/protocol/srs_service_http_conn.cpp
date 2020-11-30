@@ -909,9 +909,9 @@ srs_error_t SrsHttpResponseWriter::send_header(char* data, int size)
     }
     
     // chunked encoding
-    if (content_length == -1) {
-        hdr->set("Transfer-Encoding", "chunked");
-    }
+    // if (content_length == -1) {
+    //     hdr->set("Transfer-Encoding", "chunked");
+    // }
     
     // keep alive to make vlc happy.
     if (hdr->get("Connection").empty()) {
