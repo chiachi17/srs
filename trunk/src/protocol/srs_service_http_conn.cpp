@@ -767,20 +767,29 @@ srs_error_t SrsHttpResponseWriter::write(char* data, int size)
     }
     
     // send in chunked encoding.
-    int nb_size = snprintf(header_cache, SRS_HTTP_HEADER_CACHE_SIZE, "%x", size);
+    // int nb_size = snprintf(header_cache, SRS_HTTP_HEADER_CACHE_SIZE, "%x", size);
     
-    iovec iovs[4];
-    iovs[0].iov_base = (char*)header_cache;
-    iovs[0].iov_len = (int)nb_size;
-    iovs[1].iov_base = (char*)SRS_HTTP_CRLF;
-    iovs[1].iov_len = 2;
-    iovs[2].iov_base = (char*)data;
-    iovs[2].iov_len = size;
-    iovs[3].iov_base = (char*)SRS_HTTP_CRLF;
-    iovs[3].iov_len = 2;
+    // iovec iovs[4];
+    // iovs[0].iov_base = (char*)header_cache;
+    // iovs[0].iov_len = (int)nb_size;
+    // iovs[1].iov_base = (char*)SRS_HTTP_CRLF;
+    // iovs[1].iov_len = 2;
+    // iovs[2].iov_base = (char*)data;
+    // iovs[2].iov_len = size;
+    // iovs[3].iov_base = (char*)SRS_HTTP_CRLF;
+    // iovs[3].iov_len = 2;
+    
+    // ssize_t nwrite = 0;
+    // if ((err = skt->writev(iovs, 4, &nwrite)) != srs_success) {
+    //     return srs_error_wrap(err, "write chunk");
+    // }
+
+    iovec iovs[2];
+    iovs[0].iov_base = (char*)data;
+    iovs[0].iov_len = size;
     
     ssize_t nwrite = 0;
-    if ((err = skt->writev(iovs, 4, &nwrite)) != srs_success) {
+    if ((err = skt->writev(iovs, 1, &nwrite)) != srs_success) {
         return srs_error_wrap(err, "write chunk");
     }
     
