@@ -427,11 +427,11 @@ srs_error_t SrsFlvTransmuxer::write_header(char flv_header[9])
         return srs_error_wrap(err, "write flv header failed");
     }
     
-    // previous tag size.
-    // char pts[] = { (char)0x00, (char)0x00, (char)0x00, (char)0x00 };
-    // if ((err = writer->write(pts, 4, NULL)) != srs_success) {
-    //     return srs_error_wrap(err, "write pts");
-    // }
+    previous tag size.
+    char pts[] = { (char)0x00, (char)0x00, (char)0x00, (char)0x00 };
+    if ((err = writer->write(pts, 4, NULL)) != srs_success) {
+        return srs_error_wrap(err, "write pts");
+    }
     
     return err;
 }

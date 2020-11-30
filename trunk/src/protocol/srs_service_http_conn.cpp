@@ -784,19 +784,19 @@ srs_error_t SrsHttpResponseWriter::write(char* data, int size)
     //     return srs_error_wrap(err, "write chunk");
     // }
 
-    char prevSize[4];
-    for (int i = 0;i < 4;i++) {
-        prevSize[i] = ( ( size >> (24 - i * 8) ) & 0xFF );
-    }
+    // char prevSize[4];
+    // for (int i = 0;i < 4;i++) {
+    //     prevSize[i] = ( ( size >> (24 - i * 8) ) & 0xFF );
+    // }
 
-    iovec iovs[2];
+    iovec iovs[1];
     iovs[0].iov_base = (char*)data;
     iovs[0].iov_len = size;
-    iovs[1].iov_base = (char*)prevSize;
-    iovs[1].iov_len = 4;
+    // iovs[1].iov_base = (char*)prevSize;
+    // iovs[1].iov_len = 4;
     
     ssize_t nwrite = 0;
-    if ((err = skt->writev(iovs, 2, &nwrite)) != srs_success) {
+    if ((err = skt->writev(iovs, 1, &nwrite)) != srs_success) {
         return srs_error_wrap(err, "write chunk");
     }
     
