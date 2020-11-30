@@ -835,7 +835,8 @@ srs_error_t SrsHttpResponseWriter::writev(const iovec* iov, int iovcnt, ssize_t*
     }
     
     // send in chunked encoding.
-    int nb_iovss = 3 + iovcnt;
+    // int nb_iovss = 3 + iovcnt;
+    int nb_iovss = iovcnt;
     iovec* iovss = iovss_cache;
     if (nb_iovss_cache < nb_iovss) {
         srs_freepa(iovss_cache);
@@ -852,23 +853,35 @@ srs_error_t SrsHttpResponseWriter::writev(const iovec* iov, int iovcnt, ssize_t*
     written += size;
     
     // chunk header
-    int nb_size = snprintf(header_cache, SRS_HTTP_HEADER_CACHE_SIZE, "%x", size);
-    iovss[0].iov_base = (char*)header_cache;
-    iovss[0].iov_len = (int)nb_size;
+    // int nb_size = snprintf(header_cache, SRS_HTTP_HEADER_CACHE_SIZE, "%x", size);
+    // iovss[0].iov_base = (char*)header_cache;
+    // iovss[0].iov_len = (int)nb_size;
 
-    // chunk header eof.
-    iovss[1].iov_base = (char*)SRS_HTTP_CRLF;
-    iovss[1].iov_len = 2;
+    // // chunk header eof.
+    // iovss[1].iov_base = (char*)SRS_HTTP_CRLF;
+    // iovss[1].iov_len = 2;
+
+    // // chunk body.
+    // for (int i = 0; i < iovcnt; i++) {
+    //     iovss[2+i].iov_base = (char*)iov[i].iov_base;
+    //     iovss[2+i].iov_len = (int)iov[i].iov_len;
+    // }
+    
+    // // chunk body eof.
+    // iovss[2+iovcnt].iov_base = (char*)SRS_HTTP_CRLF;
+    // iovss[2+iovcnt].iov_len = 2;
+
+    // // sendout all ioves.
+    // ssize_t nwrite = 0;
+    // if ((err = srs_write_large_iovs(skt, iovss, nb_iovss, &nwrite)) != srs_success) {
+    //     return srs_error_wrap(err, "writev large iovs");
+    // }
 
     // chunk body.
     for (int i = 0; i < iovcnt; i++) {
-        iovss[2+i].iov_base = (char*)iov[i].iov_base;
-        iovss[2+i].iov_len = (int)iov[i].iov_len;
+        iovss[i].iov_base = (char*)iov[i].iov_base;
+        iovss[i].iov_len = (int)iov[i].iov_len;
     }
-    
-    // chunk body eof.
-    iovss[2+iovcnt].iov_base = (char*)SRS_HTTP_CRLF;
-    iovss[2+iovcnt].iov_len = 2;
 
     // sendout all ioves.
     ssize_t nwrite = 0;
