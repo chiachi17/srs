@@ -680,11 +680,12 @@ srs_error_t SrsLiveStream::do_serve_http(ISrsHttpResponseWriter* w, ISrsHttpMess
         }
         
         // sendout all messages.
-        if (ffe) {
-            err = ffe->write_tags(msgs.msgs, count);
-        } else {
-            err = streaming_send_messages(enc, msgs.msgs, count);
-        }
+        // if (ffe) {
+        //     err = ffe->write_tags(msgs.msgs, count);
+        // } else {
+        //     err = streaming_send_messages(enc, msgs.msgs, count);
+        // }
+        err = streaming_send_messages(enc, msgs.msgs, count);
 
         // TODO: FIXME: Update the stat.
 
