@@ -762,9 +762,11 @@ srs_error_t SrsHttpResponseWriter::write(char* data, int size)
     }
     
     // directly send with content length
-    if (content_length != -1) {
-        return skt->write((void*)data, size, NULL);
-    }
+    // if (content_length != -1) {
+    //     return skt->write((void*)data, size, NULL);
+    // }
+
+    return skt->write((void*)data, size, NULL);
     
     // send in chunked encoding.
     // int nb_size = snprintf(header_cache, SRS_HTTP_HEADER_CACHE_SIZE, "%x", size);
@@ -808,7 +810,8 @@ srs_error_t SrsHttpResponseWriter::writev(const iovec* iov, int iovcnt, ssize_t*
     srs_error_t err = srs_success;
     
     // when header not ready, or not chunked, send one by one.
-    if (!header_wrote || content_length != -1) {
+    // if (!header_wrote || content_length != -1) {
+    if (!header_wrote) {
         ssize_t nwrite = 0;
         for (int i = 0; i < iovcnt; i++) {
             nwrite += iov[i].iov_len;
