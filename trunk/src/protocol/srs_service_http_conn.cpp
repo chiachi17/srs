@@ -936,9 +936,9 @@ srs_error_t SrsHttpResponseWriter::send_header(char* data, int size)
     }
     
     // set server if not set.
-    if (hdr->get("Server").empty()) {
-        hdr->set("Server", RTMP_SIG_SRS_SERVER);
-    }
+    // if (hdr->get("Server").empty()) {
+    //     hdr->set("Server", RTMP_SIG_SRS_SERVER);
+    // }
     
     // chunked encoding
     // if (content_length == -1) {
@@ -946,9 +946,9 @@ srs_error_t SrsHttpResponseWriter::send_header(char* data, int size)
     // }
     
     // keep alive to make vlc happy.
-    if (hdr->get("Connection").empty()) {
-        hdr->set("Connection", "Keep-Alive");
-    }
+    // if (hdr->get("Connection").empty()) {
+    //     hdr->set("Connection", "Keep-Alive");
+    // }
 
     // Filter the header before writing it.
     if (hf && ((err = hf->filter(hdr)) != srs_success)) {
