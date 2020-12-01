@@ -885,11 +885,7 @@ srs_error_t SrsHttpResponseWriter::writev(const iovec* iov, int iovcnt, ssize_t*
 
     // sendout all ioves.
     ssize_t nwrite = 0;
-    // if ((err = srs_write_large_iovs(skt, iovss, nb_iovss, &nwrite)) != srs_success) {
-    //     return srs_error_wrap(err, "writev large iovs");
-    // }
-
-    if ((err = srs_write_large_iovs(skt, iov, iovcnt, &nwrite)) != srs_success) {
+    if ((err = srs_write_large_iovs(skt, iovss, nb_iovss, &nwrite)) != srs_success) {
         return srs_error_wrap(err, "writev large iovs");
     }
     
