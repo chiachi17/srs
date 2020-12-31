@@ -589,6 +589,7 @@ SrsGopCache::SrsGopCache()
     cached_video_count = 0;
     enable_gop_cache = true;
     audio_after_last_video_count = 0;
+    wait_for_keyframe = true;
 }
 
 SrsGopCache::~SrsGopCache()
@@ -626,6 +627,19 @@ srs_error_t SrsGopCache::cache(SrsSharedPtrMessage* shared_msg)
     
     // the gop cache know when to gop it.
     SrsSharedPtrMessage* msg = shared_msg;
+
+    if (wait_for_keyframe && SrsFlvVideo::keyframe(msg->payload, msg->size)) {
+        cached_video_count = 1;
+        wait_for_keyframe = false;
+    } else {
+        return err;
+    }
+
+
+    if (cached_video_count > 12) {
+        clear();
+        return err;
+    }
     
     // got video, update the video count if acceptable
     if (msg->is_video()) {
@@ -655,6 +669,7 @@ srs_error_t SrsGopCache::cache(SrsSharedPtrMessage* shared_msg)
         return err;
     }
     
+    /*
     // clear gop cache when got key frame
     if (msg->is_video() && SrsFlvVideo::keyframe(msg->payload, msg->size)) {
         clear();
@@ -662,6 +677,7 @@ srs_error_t SrsGopCache::cache(SrsSharedPtrMessage* shared_msg)
         // curent msg is video frame, so we set to 1.
         cached_video_count = 1;
     }
+    */
     
     // cache the frame.
     gop_cache.push_back(msg->copy());
