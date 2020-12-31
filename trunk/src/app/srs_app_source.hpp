@@ -264,6 +264,9 @@ private:
     int audio_after_last_video_count;
     // cached gop.
     std::vector<SrsSharedPtrMessage*> gop_cache;
+
+    bool wait_for_keyframe;
+
 public:
     SrsGopCache();
     virtual ~SrsGopCache();
