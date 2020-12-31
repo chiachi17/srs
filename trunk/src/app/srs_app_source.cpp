@@ -628,13 +628,14 @@ srs_error_t SrsGopCache::cache(SrsSharedPtrMessage* shared_msg)
     // the gop cache know when to gop it.
     SrsSharedPtrMessage* msg = shared_msg;
 
-    if (wait_for_keyframe && SrsFlvVideo::keyframe(msg->payload, msg->size)) {
-        cached_video_count = 1;
-        wait_for_keyframe = false;
-    } else {
-        return err;
+    if (wait_for_keyframe) {
+        if (SrsFlvVideo::keyframe(msg->payload, msg->size)) {
+            cached_video_count = 1;
+            wait_for_keyframe = false;
+        } else {
+            return err;
+        }
     }
-
 
     if (cached_video_count > 12) {
         clear();
