@@ -638,6 +638,7 @@ srs_error_t SrsGopCache::cache(SrsSharedPtrMessage* shared_msg)
 
     if (cached_video_count > 12) {
         clear();
+        wait_for_keyframe = true;
         return err;
     }
     
